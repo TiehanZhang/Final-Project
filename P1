@@ -1,0 +1,28 @@
+# Write your code here :-)
+from microbit import *
+import random
+Position = 0
+sPosition = random.randint(-50, 50)
+while True:
+    X = pin0.read_analog()
+    if X > 424 and X < 824: 
+        Position = Position + 1
+        # go right, low speed
+    elif X < 420 and X > 2:
+        Position = Position - 1
+        # go left, low speed
+    elif X >= 824:
+        Position = Position + 2
+        # go right, high speed
+    elif X <= 2:
+        Position = Position - 2
+        # go left, high speed
+    else:
+        Position = Position
+        # stay in original point
+    Distance = Position - sPosition
+    # the distance of player position and sound position
+    print(Position, Distance)
+    sleep(200)
+        
+        

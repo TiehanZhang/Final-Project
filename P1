@@ -5,10 +5,12 @@ Position = 0
 sPosition = random.randint(-50, 50)
 while True:
     X = pin0.read_analog()
-    if X > 424 and X < 824: 
+    B = pin8.read_digital()
+    Distance = Position - sPosition
+    if X > 430 and X < 824: 
         Position = Position + 1
         # go right, low speed
-    elif X < 420 and X > 2:
+    elif X < 410 and X > 2:
         Position = Position - 1
         # go left, low speed
     elif X >= 824:
@@ -17,12 +19,13 @@ while True:
     elif X <= 2:
         Position = Position - 2
         # go left, high speed
+    elif B == 1 and Distance == 0:
+        display.show(Image.HAPPY)
+        sleep(2000)
     else:
         Position = Position
         # stay in original point
-    Distance = Position - sPosition
     # the distance of player position and sound position
-    print(Position, Distance)
+    print(Position, Distance, B)
     sleep(200)
-        
         

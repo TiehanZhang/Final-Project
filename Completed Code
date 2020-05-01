@@ -1,0 +1,131 @@
+# Write your code here :-)
+from microbit import *
+from mb_i2c_lcd1602 import *
+import random
+import math
+import music
+PlayerX = 0
+PlayerY = 0
+# initialize the player's position on the XY 2 dimensions matrix
+TargetX = random.randint(-20, 20)
+TargetY = random.randint(-20, 20)
+l=LCD1620()
+l.puts('You can move by',0,0)
+l.puts('using joystick',0,1)
+# LCD Instruction     
+while True: 
+    X = pin1.read_analog()
+    Y = pin2.read_analog()
+    B = pin8.read_digital()
+    # refine the joystick attribute
+    Distance = math.sqrt(pow(TargetX - PlayerX, 2) + pow(TargetY - PlayerY, 2))
+    # using the triangle principle to culculate the distance between Player and Target
+    if Distance > 0 and Distance < 30:
+        if X > 430 and X < 824:
+            PlayerX = PlayerX + 1
+            # go right, low speed
+            if Y > 420 and Y < 823:
+                PlayerY = PlayerY - 1
+                # go up, low speed
+            elif Y < 400 and Y > 3:
+                PlayerY = PlayerY + 1
+                # go up, low speed
+            elif Y >= 823:
+                PlayerY = PlayerY - 2
+                # go down, high speed
+            elif Y <= 3:
+                PlayerY = PlayerY + 2
+                # go up, high speed
+        elif X < 410 and X > 2:
+            PlayerX = PlayerX - 1
+            # go left, low speed
+            if Y > 420 and Y < 823:
+                PlayerY = PlayerY - 1
+                # go up, low speed
+            elif Y < 400 and Y > 3:
+                PlayerY = PlayerY + 1
+                # go up, low speed
+            elif Y >= 823:
+                PlayerY = PlayerY - 2
+                # go down, high speed
+            elif Y <= 3:
+                PlayerY = PlayerY + 2
+                # go up, high speed
+        elif X >= 824:
+            PlayerX = PlayerX + 2
+            # go right, high speed
+            if Y > 420 and Y < 823:
+                PlayerY = PlayerY - 1
+                # go up, low speed
+            elif Y < 400 and Y > 3:
+                PlayerY = PlayerY + 1
+                # go up, low speed
+            elif Y >= 823:
+                PlayerY = PlayerY - 2
+                # go down, high speed
+            elif Y <= 3:
+                PlayerY = PlayerY + 2
+                # go up, high speed
+        elif X <= 2:
+            PlayerX = PlayerX - 2
+            # go left, high speed
+            if Y > 420 and Y < 823:
+                PlayerY = PlayerY - 1
+                # go up, low speed
+            elif Y < 400 and Y > 3:
+                PlayerY = PlayerY + 1
+                # go up, low speed
+            elif Y >= 823:
+                PlayerY = PlayerY - 2
+                # go down, high speed
+            elif Y <= 3:
+                PlayerY = PlayerY + 2
+                # go up, high speed
+        elif X >= 410 and X <= 430:
+            PlayerX = PlayerX
+            # go left, high speed
+            if Y > 420 and Y < 823:
+                PlayerY = PlayerY - 1
+                # go up, low speed
+            elif Y < 400 and Y > 3:
+                PlayerY = PlayerY + 1
+                # go up, low speed
+            elif Y >= 823:
+                PlayerY = PlayerY - 2
+                # go down, high speed
+            elif Y <= 3:
+                PlayerY = PlayerY + 2
+                # go up, high speed
+        else:
+            PlayerX = PlayerX
+            PlayerY = PlayerY
+            # stay in original point
+        if Distance > 0 and Distance <= 1:
+            music.pitch(3200, 30)
+        elif Distance > 1 and Distance < 3:
+            music.pitch(2600, 50)
+        elif Distance >= 3 and Distance < 5:
+            music.pitch(1600, 80)
+        elif Distance >= 4 and Distance <= 8:
+            music.pitch(800, 120)
+        elif Distance >= 8 and Distance <= 14:
+            music.pitch(400, 150)
+        elif Distance >= 14 and Distance <= 22:
+            music.pitch(200, 200)
+        else:
+            music.pitch(100, 300)
+    elif Distance >= 30:
+        display.show(Image.SAD)
+        l.puts('Sorry You lose',0,0)
+        music.play(music.DADADADUM)
+        sleep(2000)
+        # Player lose the game
+    elif Distance == 0:
+        display.show(Image.HAPPY)
+        l.puts('Congrats You win',0,0)
+        music.play(music.RINGTONE)
+        sleep(2000)
+        # Player wins
+    print(X, Y, TargetX, TargetY, Distance)
+    # Print the Player's coordinate and the joystick's attribute to check my code
+    sleep(250)
